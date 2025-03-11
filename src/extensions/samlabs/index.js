@@ -9,7 +9,8 @@ const SamLabsBLE = {
     SAMServ: '3b989460-975f-11e4-a9fb-0002a5d5c51b',
     SensorCharacteristic: '4c592e60-980c-11e4-959a-0002a5d5c51b',
     ActorCharacteristic: '84fc1520-980c-11e4-8bed-0002a5d5c51b',
-    StatusLedCharacteristic: '5baab0a0-980c-11e4-b5e9-0002a5d5c51b'
+    StatusLedCharacteristic: '5baab0a0-980c-11e4-b5e9-0002a5d5c51b',
+    SAMBotCommandCharacteristic: 'abcd1234-1234-1234-1234-0002a5d5c51b'
 }
 
 const DeviceTypes = [
@@ -69,6 +70,7 @@ class SAMDevice {
         this.deviceType = DeviceTypes[0];
         this.displayName = DeviceTypes[0].name + ' 1';
         this.sameDevices = 1;
+        this.SAMBotAvailable = false;
     }
 };
 
@@ -195,6 +197,17 @@ class Scratch3SamLabs {
                 terminal: false,
                 arguments: {
                     num: { menu: 'babyBotDeviceMenu', type: ArgumentType.NUMBER }
+                }
+            },
+            {
+                opcode: 'BabyBotWrite',
+                blockType: BlockType.COMMAND,
+                text: '[num] set motor speed right [r], left [l]',
+                terminal: false,
+                arguments: {
+                    num: { menu: 'babyBotDeviceMenu', type: ArgumentType.NUMBER },
+                    r: { defaultValue: 0, type: ArgumentType.NUMBER },
+                    l: { defaultValue: 0, type: ArgumentType.NUMBER }
                 }
             }
         ];
@@ -388,10 +401,9 @@ class Scratch3SamLabs {
 
             // Connect to the GATT server
             const server = await device.gatt.connect();
+            console.log('Connected to GATT Server:', server);
 
             await this.setupGATTDevice(server, device);
-            //this.storeDeviceListToAsset();
-            this.runtime.emit('TOOLBOX_EXTENSIONS_NEED_UPDATE');
         } catch (error) {
             console.log('Error:', error);
         }
@@ -405,7 +417,7 @@ class Scratch3SamLabs {
 
         // Get the Battery Level Characteristic
         const batteryLevelCharacteristic = await battServ.getCharacteristic(SamLabsBLE.batteryLevelCharacteristic);
-
+        console.log('Found battery characteristic');
         const SAMServ = await server.getPrimaryService(SamLabsBLE.SAMServ);
 
         var SAMSensorCharacteristic = null;
@@ -413,6 +425,7 @@ class Scratch3SamLabs {
 
         try {
             SAMSensorCharacteristic = await SAMServ.getCharacteristic(SamLabsBLE.SensorCharacteristic);
+            console.log('Found sensor characteristic');
         } catch (error) {
             console.log('Sensor characteristic not found');
             SensorAvailable = false;
@@ -422,20 +435,23 @@ class Scratch3SamLabs {
 
         try {
             SAMActorCharacteristic = await SAMServ.getCharacteristic(SamLabsBLE.ActorCharacteristic);
+            console.log('Found actor characteristic');
         } catch (error) {
             console.log('Actor characteristic not found');
             ActorAvailable = false;
         }
         var SAMBotCharacteristic = null;
-        var SAMBotAvailable = true;
+        var SAMBotAvailable = (device.name === 'SAM BabyBot');
 
         try {
             SAMBotCharacteristic = await SAMServ.getCharacteristic(SamLabsBLE.SAMBotCommandCharacteristic);
+            console.log('Found samBot characteristic');
         } catch (error) {
-            SAMBotAvailable = false;
+            console.log('samBot characteristic not found');
         }
 
         const SAMStatusLEDCharacteristic = await SAMServ.getCharacteristic(SamLabsBLE.StatusLedCharacteristic);
+        console.log('Found statusled characteristic');
 
         var sameDevices = 1;
         this.deviceMap.forEach(value => {
@@ -461,6 +477,7 @@ class Scratch3SamLabs {
         deviceListItem.id = device.id;
         deviceListItem.deviceType = DeviceTypes[typeId];
         deviceListItem.sameDevices = sameDevices;
+        deviceListItem.SAMBotAvailable = SAMBotAvailable;
         this.deviceList.set(device.id, deviceListItem);
         let block = {
             id: device.id,
@@ -480,18 +497,28 @@ class Scratch3SamLabs {
 
         this.deviceMap.set(device.id, block);
         this.updateDeviceMenu();
-        this.setBlockLedColor(block, this.hexToRgb(this.colors[num]));
+        await this.setBlockLedColor(block, this.hexToRgb(this.colors[num]));
+        console.log('set satus color:', this.colors[num]);
 
-        if (SensorAvailable) {
-            await SAMSensorCharacteristic.startNotifications();
-            SAMSensorCharacteristic.addEventListener('characteristicvaluechanged', this.handleSensorNotifications.bind(this, device.id));
+        if (SensorAvailable && !SAMBotAvailable) {
+            try {
+                await SAMSensorCharacteristic.startNotifications();
+                 SAMSensorCharacteristic.addEventListener('characteristicvaluechanged', this.handleSensorNotifications.bind(this, device.id));
+                console.log('subscribed to sensor events');
+            } catch (error) {
+                console.log('Failed to subscribe to sensor events:', error);
+            }
         }
 
-        await batteryLevelCharacteristic.startNotifications();
-        batteryLevelCharacteristic.addEventListener('characteristicvaluechanged', this.handleBattChange.bind(this, device.id));
+        try {
+            await batteryLevelCharacteristic.startNotifications();
+            batteryLevelCharacteristic.addEventListener('characteristicvaluechanged', this.handleBattChange.bind(this, device.id));
+            console.log('subscribed to battery events');
+        } catch (error) {
+            console.log('Failed to subscribe to battery events:', error);
+        }
 
-
-        console.log(`Connected to ${device.name || 'Unknown Device'}, id ${device.id}`);
+        console.log(`Connected to ${device.name || 'Unknown Device'}, id ${device.id}, sambot ${SAMBotAvailable}`);
     }
 
     onDisconnected(event) {
@@ -500,7 +527,7 @@ class Scratch3SamLabs {
     handleSensorNotifications(id, event) {
         const value = event.target.value;
         let device = this.deviceMap.get(id);
-        device.value = value.getUint8(0);
+        device.value = value.getUint8(0) / 2.55;
     }
 
     handleBattChange(id, event) {
@@ -627,6 +654,39 @@ class Scratch3SamLabs {
             return;
         }
         BabyBotCommand(block, new Uint8Array(['e', 'C', 0]));
+    }
+    BabyBotWrite(args) {
+        const block = this.getDeviceFromId(args.num);
+        if (!block) {
+            return;
+        }
+        let Lspeed = Number(args.l)
+        if (Lspeed < 0) {
+            if (Lspeed < -100) {
+                Lspeed = -100;
+            }
+            Lspeed = (100 - Math.abs(Lspeed)) * 1.28 + 128
+        }
+        else {
+            if (Lspeed > 100) {
+                Lspeed = 100;
+            }
+            Lspeed = Lspeed * 1.27
+        }
+        let Rspeed = Number(args.r)
+        if (Rspeed < 0) {
+            if (Rspeed < -100) {
+                Rspeed = -100;
+            }
+            Rspeed = (100 - Math.abs(Rspeed)) * 1.28 + 128
+        }
+        else {
+            if (Rspeed > 100) {
+                Rspeed = 100;
+            }
+            Rspeed = Rspeed * 1.27
+        }
+        block.SAMActorCharacteristic.writeValue(new Uint8Array([Rspeed, Lspeed, 0]));
     }
 }
 
