@@ -1,5 +1,6 @@
 const BlockType = require('../../extension-support/block-type');
 const ArgumentType = require('../../extension-support/argument-type');
+const Target = require('../../engine/target');
 require('regenerator-runtime/runtime');
 
 const SamLabsBLE = {
@@ -11,6 +12,66 @@ const SamLabsBLE = {
     StatusLedCharacteristic: '5baab0a0-980c-11e4-b5e9-0002a5d5c51b'
 }
 
+const DeviceTypes = [
+    {
+        name: 'undefined',
+        advName: '',
+    },
+    {
+        name: 'BabyBot',
+        advName: 'SAM BabyBot',
+    },
+    {
+        name: 'slider',
+        advName: 'SAM Potentiometer',
+    },
+    {
+        name: 'light sensor',
+        advName: 'SAM LDR',
+    },
+    {
+        name: 'button',
+        advName: 'SAM Button',
+    },
+    {
+        name: 'proximity',
+        advName: 'SAM IR Sensor',
+    },
+    {
+        name: 'heat',
+        advName: 'SAM Temperature',
+    },
+    {
+        name: 'tilt',
+        advName: 'SAM Tilt',
+    },
+    {
+        name: 'pressure',
+        advName: 'SAM Pressure',
+    },
+    {
+        name: 'RGB led',
+        advName: 'SAM RGB Led',
+    },
+    {
+        name: 'DC motor',
+        advName: 'SAM DC Motor',
+    },
+    {
+        name: 'servo',
+        advName: 'SAM Servo Motor',
+    }
+]
+
+class SAMDevice {
+    constructor() {
+        this.id = '';
+        this.deviceType = DeviceTypes[0];
+        this.displayName = DeviceTypes[0].name + ' 1';
+        this.sameDevices = 1;
+    }
+};
+
 class Scratch3SamLabs {
     constructor(runtime) {
         this.runtime = runtime;
@@ -18,12 +79,14 @@ class Scratch3SamLabs {
         this.numberOfConnectedDevices = 0;
         this.extensionId = 'samlabsExtension';
         this.runtime.on('PROJECT_STOP_ALL', this.stopAll.bind(this));
+        this.runtime.on('PROJECT_RUN_STOP', this.stopAll.bind(this));
         this.deviceMenu = [];
+        this.BabyBotdeviceMenu = [];
         this.blocks = [
             {
                 opcode: 'connectToDevice',
                 blockType: BlockType.COMMAND,
-                text: 'Connect to a block',
+                text: 'Connect a device',
             },
             {
                 opcode: 'setLEDColor',
@@ -86,6 +149,53 @@ class Scratch3SamLabs {
                 arguments: {
                     num: { menu: 'deviceMenu', type: ArgumentType.NUMBER }
                 }
+            },
+            {
+                opcode: 'BabyBotExecCommand',
+                blockType: BlockType.COMMAND,
+                text: '[num] [command]',
+                terminal: false,
+                arguments: {
+                    num: { menu: 'babyBotDeviceMenu', type: ArgumentType.NUMBER },
+                    command: { menu: 'babyBotCommand', type: ArgumentType.STRING }
+                }
+            },
+            {
+                opcode: 'BabyBotPushCommand',
+                blockType: BlockType.COMMAND,
+                text: '[num] push [command] to itiner',
+                terminal: false,
+                arguments: {
+                    num: { menu: 'babyBotDeviceMenu', type: ArgumentType.NUMBER },
+                    command: { menu: 'babyBotCommand', type: ArgumentType.STRING }
+                }
+            },
+            {
+                opcode: 'BabyBotStart',
+                blockType: BlockType.COMMAND,
+                text: '[num] Start',
+                terminal: false,
+                arguments: {
+                    num: { menu: 'babyBotDeviceMenu', type: ArgumentType.NUMBER }
+                }
+            },
+            {
+                opcode: 'BabyBotStop',
+                blockType: BlockType.COMMAND,
+                text: '[num] Stop',
+                terminal: false,
+                arguments: {
+                    num: { menu: 'babyBotDeviceMenu', type: ArgumentType.NUMBER }
+                }
+            },
+            {
+                opcode: 'BabyBotClear',
+                blockType: BlockType.COMMAND,
+                text: '[num] Clear itiner',
+                terminal: false,
+                arguments: {
+                    num: { menu: 'babyBotDeviceMenu', type: ArgumentType.NUMBER }
+                }
             }
         ];
 
@@ -93,6 +203,80 @@ class Scratch3SamLabs {
             "#FF00FF", "#00FFFF", "#FFFF00", "#808000",
             "#FF0000", "#00FF00", "#0000FF"
         ];
+        this.deviceAssetAvailable = false;
+        this.runtime.on('PROJECT_LOADED', this.onProjectLoad.bind(this));
+        this.DeviceMapping = new Map();
+        this.deviceList = new Map();
+        //this.createDeviceListAsset();
+    }
+
+    static get DeviceListAssetId () {
+        return '_SAMLabs_devicelist'
+    }
+
+    storeDeviceListToAsset() {
+        this.createDeviceListAsset();
+    }
+
+    loadDeviceListFromAsset() {
+        const asset = this.runtime.storage.get('_SAMLabs_devicelist', this.runtime.storage.DataFormat.JSON);
+        if (!asset)
+        {
+            this.deviceAssetAvailable = false;
+            return undefined;
+        }
+        this.deviceAssetAvailable = true;
+        var string = new TextDecoder().decode(asset.data);
+        const devices = JSON.parse(string);
+        this.deviceList = new Map(Object.entries(devices.deviceList));
+        this.DeviceMapping = new Map(Object.entries(devices.mapping));
+    }
+
+    createDeviceListAsset() {
+        const encoder = new TextEncoder();
+        const encodedData = encoder.encode(JSON.stringify({
+            deviceList: Object.fromEntries(this.deviceList),
+            mapping: Object.fromEntries(this.DeviceMapping)
+        }));
+        console.log("storing data:", encodedData);
+        this.runtime.storage.builtinHelper._store(this.runtime.storage.AssetType.Sprite, this.runtime.storage.DataFormat.JSON, encodedData, '_SAMLabs_devicelist');
+        this.loadDeviceListFromAsset();
+        if (this.deviceAssetAvailable)
+        {
+            return;
+        }
+        const asset = new this.runtime.storage.Asset(
+            this.runtime.storage.AssetType.Sprite,
+            '_SAMLabs_devicelist',
+            this.runtime.storage.DataFormat.JSON,
+            encodedData,
+            false
+        );
+        // Create a new sprite (target)
+        const newTarget = new Target(this.runtime);
+
+        // Replace the entire sprite data with JSON
+        newTarget.sprite = {
+            costumes: [
+                {
+                    asset: asset
+                }
+            ],
+            sounds: []
+        };
+
+        // Add the target to the runtime (makes it a real sprite)
+        this.runtime.targets.push(newTarget);
+        
+        console.log('Added new sprite:', newTarget);
+        this.deviceAssetAvailable = true;
+    }
+
+    onProjectLoad() {
+        this.loadDeviceListFromAsset();
+        if (!this.deviceAssetAvailable) {
+            this.createJsonAsset();
+        }
     }
 
     hexToRgb(hex) {
@@ -117,20 +301,59 @@ class Scratch3SamLabs {
             color2: '#0DA57A',
             blocks: this.blocks,
             menus: {
-                deviceMenu: 'getDeviceMenu'
+                deviceMenu: 'getDeviceMenu',
+                babyBotDeviceMenu: 'getBabyBotDeviceMenu',
+                babyBotCommand: 'getBabyBotCommandMenu'
             }
         };
     }
 
     updateDeviceMenu() {
         this.deviceMenu = [];
-        this.deviceMap.forEach(device => {
-            this.deviceMenu.push({ text: device.name, value: device.num });
+        this.BabyBotdeviceMenu = [];
+        this.deviceList.forEach(device => {
+            if (!device.SAMBotAvailable) {
+                this.deviceMenu.push({ text: device.displayName, value: device.id });
+            }
+            else {
+                this.BabyBotdeviceMenu.push({ text: device.displayName, value: device.id });
+            }
         });
     }
 
     getDeviceMenu() {
         return this.deviceMenu.length ? this.deviceMenu : [{ text: 'No connected Blocks', value: '-1' }];
+    }
+
+    getBabyBotDeviceMenu() {
+        return this.BabyBotdeviceMenu.length ? this.BabyBotdeviceMenu : [{ text: 'No connected devices', value: '-1' }];
+    }
+
+    getBabyBotCommandMenu() {
+        return [{
+                    text: 'move Forward',
+                    value: 'F'
+                },
+                {
+                    text: 'move Backward',
+                    value: 'B'
+                },
+                {
+                    text: 'turn Right',
+                    value: 'R'
+                },
+                {
+                    text: 'turn Left',
+                    value: 'L'
+                }];
+    }
+
+    getDeviceFromId(id) {
+        if (this.DeviceMapping.get(id))
+        {
+            return this.deviceMap.get(this.DeviceMapping.get(id));
+        }
+        return this.deviceMap.get(id);
     }
 
     addBlock(newBlock) {
@@ -143,7 +366,7 @@ class Scratch3SamLabs {
     }
 
     stopDevice(device) {
-        this.setLEDRGBColor({ num: device.num, red: 0, green: 0, blue: 0 });
+        this.setLEDRGBColor({ id: device.id, red: 0, green: 0, blue: 0 });
     }
 
     async connectToDevice() {
@@ -165,10 +388,10 @@ class Scratch3SamLabs {
 
             // Connect to the GATT server
             const server = await device.gatt.connect();
-            console.log('Connected to GATT server');
 
             await this.setupGATTDevice(server, device);
-
+            //this.storeDeviceListToAsset();
+            this.runtime.emit('TOOLBOX_EXTENSIONS_NEED_UPDATE');
         } catch (error) {
             console.log('Error:', error);
         }
@@ -179,11 +402,9 @@ class Scratch3SamLabs {
         this.numberOfConnectedDevices++;
         // Get the Battery Service
         const battServ = await server.getPrimaryService(SamLabsBLE.battServ);
-        console.log('Battery Service found:', battServ);
 
         // Get the Battery Level Characteristic
         const batteryLevelCharacteristic = await battServ.getCharacteristic(SamLabsBLE.batteryLevelCharacteristic);
-        console.log('Battery Level Characteristic found:', batteryLevelCharacteristic);
 
         const SAMServ = await server.getPrimaryService(SamLabsBLE.SAMServ);
 
@@ -205,6 +426,14 @@ class Scratch3SamLabs {
             console.log('Actor characteristic not found');
             ActorAvailable = false;
         }
+        var SAMBotCharacteristic = null;
+        var SAMBotAvailable = true;
+
+        try {
+            SAMBotCharacteristic = await SAMServ.getCharacteristic(SamLabsBLE.SAMBotCommandCharacteristic);
+        } catch (error) {
+            SAMBotAvailable = false;
+        }
 
         const SAMStatusLEDCharacteristic = await SAMServ.getCharacteristic(SamLabsBLE.StatusLedCharacteristic);
 
@@ -214,55 +443,74 @@ class Scratch3SamLabs {
                 sameDevices++;
             }
         });
-        let displayName = device.name.substring(4) + ' ' + sameDevices;
+        var typeId = 0;
+        for (typeId = 0; typeId < DeviceTypes.length; typeId++)
+        {
+            if (DeviceTypes[typeId].advName == device.name)
+            {
+                break;
+            }
+        }
+        if (typeId == DeviceTypes.length)
+        {
+            typeId = 0;
+        }
+        let displayName = DeviceTypes[typeId].name + ' ' + sameDevices;
+        let deviceListItem = new SAMDevice;
+        deviceListItem.displayName = displayName;
+        deviceListItem.id = device.id;
+        deviceListItem.deviceType = DeviceTypes[typeId];
+        deviceListItem.sameDevices = sameDevices;
+        this.deviceList.set(device.id, deviceListItem);
         let block = {
-            num: num,
+            id: device.id,
             device: device,
-            name: displayName,
+            typeId: typeId,
             battReadNotifyCharacteristic: batteryLevelCharacteristic,
             SAMSensorCharacteristic: SAMSensorCharacteristic,
             SensorAvailable: SensorAvailable,
             ActorAvailable: ActorAvailable,
+            SAMBotAvailable: SAMBotAvailable,
+            SAMBotCharacteristic: SAMBotCharacteristic,
             SAMActorCharacteristic: SAMActorCharacteristic,
             SAMStatusLEDCharacteristic: SAMStatusLEDCharacteristic,
             value: 0,
             battery: 0
         };
 
-        this.deviceMap.set(num, block);
+        this.deviceMap.set(device.id, block);
         this.updateDeviceMenu();
         this.setBlockLedColor(block, this.hexToRgb(this.colors[num]));
 
         if (SensorAvailable) {
             await SAMSensorCharacteristic.startNotifications();
-            SAMSensorCharacteristic.addEventListener('characteristicvaluechanged', this.handleSensorNotifications.bind(this, num));
+            SAMSensorCharacteristic.addEventListener('characteristicvaluechanged', this.handleSensorNotifications.bind(this, device.id));
         }
 
         await batteryLevelCharacteristic.startNotifications();
-        batteryLevelCharacteristic.addEventListener('characteristicvaluechanged', this.handleBattChange.bind(this, num));
+        batteryLevelCharacteristic.addEventListener('characteristicvaluechanged', this.handleBattChange.bind(this, device.id));
 
 
-        console.log(`Connected to ${device.name || 'Unknown Device'}, num ${num}`);
+        console.log(`Connected to ${device.name || 'Unknown Device'}, id ${device.id}`);
     }
 
     onDisconnected(event) {
     }
 
-    handleSensorNotifications(num, event) {
+    handleSensorNotifications(id, event) {
         const value = event.target.value;
-        let device = this.deviceMap.get(num);
+        let device = this.deviceMap.get(id);
         device.value = value.getUint8(0);
     }
 
-    handleBattChange(num, event) {
+    handleBattChange(id, event) {
         const value = event.target.value;
-        let device = this.deviceMap.get(num);
+        let device = this.deviceMap.get(id);
         device.battery = value.getUint8(0);
     }
 
     async setLEDColor(args) {
-        const num = Number(args.num);
-        const block = this.deviceMap.get(num);
+        const block = this.getDeviceFromId(args.num);
         if (!block) {
             return;
         }
@@ -279,8 +527,7 @@ class Scratch3SamLabs {
     }
 
     async setLEDRGBColor(args) {
-        const num = Number(args.num);
-        const block = this.deviceMap.get(num);
+        const block = this.getDeviceFromId(args.num);
         if (!block || !block.ActorAvailable) {
             return;
         }
@@ -294,7 +541,7 @@ class Scratch3SamLabs {
     }
 
     async setBlockMotorSpeed(args) {
-        const block = this.deviceMap.get(Number(args.num));
+        const block = this.getDeviceFromId(args.num);
         if (!block || !block.ActorAvailable) {
             return;
         }
@@ -316,7 +563,7 @@ class Scratch3SamLabs {
     }
 
     async setBlockServo(args) {
-        const block = this.deviceMap.get(Number(args.num));
+        const block = this.getDeviceFromId(args.num);
         if (!block || !block.ActorAvailable) {
             return;
         }
@@ -326,7 +573,7 @@ class Scratch3SamLabs {
     }
 
     getSensorValue(args) {
-        const block = this.deviceMap.get(Number(args.num));
+        const block = this.getDeviceFromId(args.num);
         if (!block) {
             return 0;
         }
@@ -334,11 +581,52 @@ class Scratch3SamLabs {
     }
 
     getBattery(args) {
-        const block = this.deviceMap.get(Number(args.num));
+        const block = this.getDeviceFromId(args.num);
         if (!block) {
             return 0;
         }
         return block.battery;
+    }
+
+    async BabyBotCommand(block, bytearray) {
+        await block.SAMBotCharacteristic.writeValue(bytearray);
+    }
+
+    BabyBotExecCommand(args) {
+        const block = this.getDeviceFromId(args.num);
+        if (!block) {
+            return;
+        }
+        BabyBotCommand(block, new Uint8Array(['e', args.command, 0]));
+    }
+
+    BabyBotPushCommand(args) {
+        const block = this.getDeviceFromId(args.num);
+        if (!block) {
+            return;
+        }
+        BabyBotCommand(block, new Uint8Array(['s', args.command, 0]));
+    }
+    BabyBotStart(args) {
+        const block = this.getDeviceFromId(args.num);
+        if (!block) {
+            return;
+        }
+        BabyBotCommand(block, new Uint8Array(['e', 'X', 0]));
+    }
+    BabyBotStop(args) {
+        const block = this.getDeviceFromId(args.num);
+        if (!block) {
+            return;
+        }
+        BabyBotCommand(block, new Uint8Array(['e', 'S', 0]));
+    }
+    BabyBotClear(args) {
+        const block = this.getDeviceFromId(args.num);
+        if (!block) {
+            return;
+        }
+        BabyBotCommand(block, new Uint8Array(['e', 'C', 0]));
     }
 }
 
