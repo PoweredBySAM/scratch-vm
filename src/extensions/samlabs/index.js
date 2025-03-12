@@ -79,7 +79,7 @@ class Scratch3SamLabs {
         this.runtime = runtime;
         this.deviceMap = new Map(); // Store multiple devices
         this.numberOfConnectedDevices = 0;
-        this.extensionId = 'samlabsExtension';
+        this.extensionId = 'samlabs';
         this.runtime.on('PROJECT_STOP_ALL', this.stopAll.bind(this));
         this.runtime.on('PROJECT_RUN_STOP', this.stopAll.bind(this));
         this.deviceMenu = [];
@@ -286,10 +286,10 @@ class Scratch3SamLabs {
     }
 
     onProjectLoad() {
-        this.loadDeviceListFromAsset();
-        if (!this.deviceAssetAvailable) {
-            this.createJsonAsset();
-        }
+        //this.loadDeviceListFromAsset();
+        //if (!this.deviceAssetAvailable) {
+        //    this.createDeviceListAsset();
+        //}
     }
 
     hexToRgb(hex) {
@@ -332,14 +332,16 @@ class Scratch3SamLabs {
                 this.BabyBotdeviceMenu.push({ text: device.displayName, value: device.id });
             }
         });
+        this.runtime.requestBlocksUpdate ();
+        this.runtime.requestToolboxExtensionsUpdate ();
     }
 
     getDeviceMenu() {
-        return this.deviceMenu.length ? this.deviceMenu : [{ text: 'No connected Blocks', value: '-1' }];
+        return this.deviceMenu.length ? this.deviceMenu : [{ text: '-', value: '-' }];
     }
 
     getBabyBotDeviceMenu() {
-        return this.BabyBotdeviceMenu.length ? this.BabyBotdeviceMenu : [{ text: 'No connected devices', value: '-1' }];
+        return this.BabyBotdeviceMenu.length ? this.BabyBotdeviceMenu : [{ text: '-', value: '-' }];
     }
 
     getBabyBotCommandMenu() {
@@ -616,48 +618,52 @@ class Scratch3SamLabs {
     }
 
     async BabyBotCommand(block, bytearray) {
+        if (!block.SAMBotAvailable)
+        {
+            return;
+        }
         await block.SAMBotCharacteristic.writeValue(bytearray);
     }
 
-    BabyBotExecCommand(args) {
+    async BabyBotExecCommand(args) {
         const block = this.getDeviceFromId(args.num);
         if (!block) {
             return;
         }
-        BabyBotCommand(block, new Uint8Array(['e', args.command, 0]));
+        await this.BabyBotCommand(block, new Uint8Array([args.command.charCodeAt(0), 'e'.charCodeAt(0), 0]));
     }
 
-    BabyBotPushCommand(args) {
+    async BabyBotPushCommand(args) {
         const block = this.getDeviceFromId(args.num);
         if (!block) {
             return;
         }
-        BabyBotCommand(block, new Uint8Array(['s', args.command, 0]));
+        await this.BabyBotCommand(block, new Uint8Array([args.command.charCodeAt(0), 's'.charCodeAt(0), 0]));
     }
-    BabyBotStart(args) {
+    async BabyBotStart(args) {
         const block = this.getDeviceFromId(args.num);
         if (!block) {
             return;
         }
-        BabyBotCommand(block, new Uint8Array(['e', 'X', 0]));
+        await this.BabyBotCommand(block, new Uint8Array(['X'.charCodeAt(0), 'e'.charCodeAt(0), 0]));
     }
-    BabyBotStop(args) {
+    async BabyBotStop(args) {
         const block = this.getDeviceFromId(args.num);
         if (!block) {
             return;
         }
-        BabyBotCommand(block, new Uint8Array(['e', 'S', 0]));
+        await this.BabyBotCommand(block, new Uint8Array(['S'.charCodeAt(0), 'e'.charCodeAt(0), 0]));
     }
-    BabyBotClear(args) {
+    async BabyBotClear(args) {
         const block = this.getDeviceFromId(args.num);
         if (!block) {
             return;
         }
-        BabyBotCommand(block, new Uint8Array(['e', 'C', 0]));
+        await this.BabyBotCommand(block, new Uint8Array(['C'.charCodeAt(0), 'e'.charCodeAt(0), 0]));
     }
-    BabyBotWrite(args) {
+    async BabyBotWrite(args) {
         const block = this.getDeviceFromId(args.num);
-        if (!block) {
+        if (!block || !block.SAMBotAvailable) {
             return;
         }
         let Lspeed = Number(args.l)
@@ -686,7 +692,7 @@ class Scratch3SamLabs {
             }
             Rspeed = Rspeed * 1.27
         }
-        block.SAMActorCharacteristic.writeValue(new Uint8Array([Rspeed, Lspeed, 0]));
+        await block.SAMActorCharacteristic.writeValue(new Uint8Array([Rspeed, Lspeed, 0]));
     }
 }
 
