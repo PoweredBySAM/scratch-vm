@@ -52,7 +52,7 @@ const DeviceTypes = [
     },
     {
         name: 'RGB led',
-        advName: 'SAM RGB Led',
+        advName: 'SAM RGB LED',
     },
     {
         name: 'DC motor',
@@ -505,7 +505,7 @@ class Scratch3SamLabs {
         if (SensorAvailable && !SAMBotAvailable) {
             try {
                 await SAMSensorCharacteristic.startNotifications();
-                 SAMSensorCharacteristic.addEventListener('characteristicvaluechanged', this.handleSensorNotifications.bind(this, device.id));
+                SAMSensorCharacteristic.addEventListener('characteristicvaluechanged', this.handleSensorNotifications.bind(this, device.id, typeId));
                 console.log('subscribed to sensor events');
             } catch (error) {
                 console.log('Failed to subscribe to sensor events:', error);
@@ -526,10 +526,15 @@ class Scratch3SamLabs {
     onDisconnected(event) {
     }
 
-    handleSensorNotifications(id, event) {
+    handleSensorNotifications(id, typeId, event) {
         const value = event.target.value;
         let device = this.deviceMap.get(id);
-        device.value = value.getUint8(0) / 2.55;
+        if (DeviceTypes[typeId].invertValues) {
+            device.value = 100 - value.getUint8(0) / 2.55
+        }
+        else {
+            device.value = value.getUint8(0) / 2.55;
+        }
     }
 
     handleBattChange(id, event) {
