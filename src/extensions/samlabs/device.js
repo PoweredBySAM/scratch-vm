@@ -13,6 +13,8 @@ const SamLabsBLE = {
     SAMBotCommandCharacteristic: 'abcd1234-1234-1234-1234-0002a5d5c51b'
 };
 
+const BabyBotIndex = 1;
+
 const DeviceTypes = [
     {name: 'undefined', advName: ''},
     {name: 'BabyBot', advName: 'SAM BabyBot'},
@@ -89,14 +91,14 @@ class SAMDevice {
         this._runtime.on(this._runtime.constructor.PERIPHERAL_SCAN_TIMEOUT, this.discoverTimeout.bind(this));
     }
 
-    async connectToDevice (deviceMap) {
+    async connectToDevice (deviceMap, options) {
         this.deviceMap = deviceMap;
         try {
             if (this.webBLE) {
-                if (!await this.connectWebBLE()) {
+                if (!await this.connectWebBLE(options)) {
                     return false;
                 }
-            } else if (!await this.connectScratchLink()) {
+            } else if (!await this.connectScratchLink(options)) {
                 return false;
             }
             this.writeStatusLed(new Uint8Array([255, 255, 255]));
@@ -107,17 +109,9 @@ class SAMDevice {
         }
     }
 
-    async connectWebBLE () {
+    async connectWebBLE (options) {
         // Request a Bluetooth device with the specified filter
-        const device = await navigator.bluetooth.requestDevice({
-            filters: [{
-                namePrefix: 'SAM' // Filter by device name starting with 'SAM'
-            }],
-            optionalServices: [
-                SamLabsBLE.battServ,
-                SamLabsBLE.SAMServ
-            ]
-        });
+        const device = await navigator.bluetooth.requestDevice(options);
 
         this.device = device;
 
@@ -282,18 +276,13 @@ class SAMDevice {
         document.head.appendChild(style);
     }
 
-    async connectScratchLink () {
+    async connectScratchLink (options) {
         try {
             if (this._ble) {
                 this._ble.disconnect();
             }
             this.discoverCancelled = false;
-            this._ble = new BLE(this._runtime, this.extID, {
-                filters: [{
-                    namePrefix: 'SAM'
-                }],
-                optionalServices: [SamLabsBLE.battServ, SamLabsBLE.SAMServ]
-            }, this._onConnect.bind(this), this.reset);
+            this._ble = new BLE(this._runtime, this.extID, options, this._onConnect.bind(this), this.reset);
             this.discovering = true;
 
             // Ensure styles are applied
@@ -504,4 +493,4 @@ class SAMDevice {
     }
 }
 
-module.exports = {DeviceTypes, SAMDevice};
+module.exports = {SamLabsBLE, DeviceTypes, BabyBotIndex, SAMDevice};
