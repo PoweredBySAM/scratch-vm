@@ -1,6 +1,6 @@
 {
   "name": "scratch-vm",
-  "version": "5.0.232",
+  "version": "5.0.247",
   "description": "Virtual Machine for Scratch 3.0",
   "author": "Massachusetts Institute of Technology",
   "license": "AGPL-3.0-only",
@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/scratchfoundation/scratch-vm.git",
-    "sha": "fee80e9178467a889d1abc3dffd1a40a3eca5bcc"
+    "sha": "35b1499962373ffb9d2ef33e3cef01b4daead530"
   },
   "main": "./dist/node/scratch-vm.js",
   "browser": "./dist/web/scratch-vm.js",
@@ -71,7 +71,7 @@
     "scratch-render": "^2.0.0",
     "scratch-sb1-converter": "^2.0.0",
     "scratch-storage": "^4.0.0",
-    "scratch-svg-renderer": "3.0.85",
+    "scratch-svg-renderer": "3.0.92",
     "scratch-translate-extension-languages": "^1.0.0",
     "text-encoding": "^0.7.0",
     "uuid": "^8.3.2",
@@ -79,7 +79,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.26.10",
-    "@babel/eslint-parser": "7.26.10",
+    "@babel/eslint-parser": "7.27.0",
     "@babel/preset-env": "7.26.9",
     "@commitlint/cli": "17.8.1",
     "@commitlint/config-conventional": "17.8.1",
@@ -100,8 +100,8 @@
     "json": "^9.0.4",
     "pngjs": "3.4.0",
     "scratch-blocks": "1.1.206",
-    "scratch-l10n": "5.0.173",
-    "scratch-render-fonts": "1.0.175",
+    "scratch-l10n": "5.0.184",
+    "scratch-render-fonts": "1.0.179",
     "scratch-semantic-release-config": "3.0.0",
     "scratch-webpack-configuration": "3.0.0",
     "script-loader": "0.7.2",
