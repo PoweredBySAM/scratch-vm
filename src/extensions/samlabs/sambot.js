@@ -153,7 +153,7 @@ class Scratch3SamBot {
     }
 
     stopDevice (device) {
-        device.writeActor(new Uint8Array([0, 0, 0]));
+        device.writeActor(new Uint8Array([0, 0, 0]), false);
     }
 
     async connectToDevice () {

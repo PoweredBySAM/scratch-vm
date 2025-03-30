@@ -237,7 +237,7 @@ class Scratch3SamLabs {
     }
 
     stopDevice (device) {
-        this.setLEDRGBColor({id: device.id, red: 0, green: 0, blue: 0});
+        device.writeActor(new Uint8Array([0, 0, 0]), false);
     }
 
     async connectToDevice () {

@@ -2,6 +2,7 @@ const BLE = require('../../io/ble');
 // eslint-disable-next-line no-unused-vars
 const Runtime = require('../../engine/runtime');
 const Base64Util = require('../../util/base64-util');
+const RateLimiter = require('../../util/rateLimiter.js');
 
 const SamLabsBLE = {
     battServ: '0000180f-0000-1000-8000-00805f9b34fb',
@@ -10,7 +11,9 @@ const SamLabsBLE = {
     SensorCharacteristic: '4c592e60-980c-11e4-959a-0002a5d5c51b',
     ActorCharacteristic: '84fc1520-980c-11e4-8bed-0002a5d5c51b',
     StatusLedCharacteristic: '5baab0a0-980c-11e4-b5e9-0002a5d5c51b',
-    SAMBotCommandCharacteristic: 'abcd1234-1234-1234-1234-0002a5d5c51b'
+    SAMBotCommandCharacteristic: 'abcd1234-1234-1234-1234-0002a5d5c51b',
+    sendInterval: 100,
+    sendRateMax: 20
 };
 
 const BabyBotIndex = 1;
@@ -82,6 +85,7 @@ class SAMDevice {
      * @param {string} id extension id
      */
     constructor (runtime, id) {
+        this._rateLimiter = new RateLimiter(SamLabsBLE.sendRateMax);
         this._runtime = runtime;
         this.extID = id;
         if (navigator.bluetooth) {
@@ -413,7 +417,7 @@ class SAMDevice {
     /**
      * Write a message to the device with Csratch Link
      * @param {string} uuid - the UUID of the characteristic to write to
-     * @param {Uint8Array} message - the message to write.
+     * @param {Uint8Array} message - the message to write
      */
     async sendScratchLink (uuid, message) {
         if (!this._ble.isConnected()) return;
@@ -458,8 +462,12 @@ class SAMDevice {
     /**
      * send a message to the stus led characteristic
      * @param {Uint8Array} msg the message
+     * @param {boolean} [useLimiter=true] - if true, use the rate limiter
      */
-    async writeStatusLed (msg) {
+    async writeStatusLed (msg, useLimiter = true) {
+        if (useLimiter) {
+            if (!this._rateLimiter.okayToSend()) return Promise.resolve();
+        }
         if (this.webBLE) {
             await this.SAMStatusLEDCharacteristic.writeValue(msg);
         } else {
@@ -470,8 +478,12 @@ class SAMDevice {
     /**
      * send a message to the actor characteristic
      * @param {Uint8Array} msg the mesage
+     * @param {boolean} [useLimiter=true] - if true, use the rate limiter
      */
-    async writeActor (msg) {
+    async writeActor (msg, useLimiter = true) {
+        if (useLimiter) {
+            if (!this._rateLimiter.okayToSend()) return Promise.resolve();
+        }
         if (this.webBLE) {
             await this.SAMActorCharacteristic.writeValue(msg);
         } else {
@@ -482,8 +494,12 @@ class SAMDevice {
     /**
      * send a message to the SamBot characteristic
      * @param {Uint8Array} msg the mesage
+     * @param {boolean} [useLimiter=true] - if true, use the rate limiter
      */
-    async writeBot (msg) {
+    async writeBot (msg, useLimiter = true) {
+        if (useLimiter) {
+            if (!this._rateLimiter.okayToSend()) return Promise.resolve();
+        }
         if (this.webBLE) {
             await this.SAMBotCharacteristic.writeValue(msg);
         } else {
