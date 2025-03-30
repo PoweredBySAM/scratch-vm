@@ -87,7 +87,6 @@ class SAMDevice {
         if (navigator.bluetooth) {
             this.webBLE = true;
         }
-        this.webBLE = false;
         this._runtime.on(this._runtime.constructor.PERIPHERAL_SCAN_TIMEOUT, this.discoverTimeout.bind(this));
     }
 
