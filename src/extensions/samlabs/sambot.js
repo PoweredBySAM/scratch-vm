@@ -93,7 +93,7 @@ class Scratch3SamBot {
     getInfo () {
         return {
             id: this.extensionId,
-            name: 'SAM BabyBot',
+            name: 'Baby SAM Bot',
             showStatusButton: false,
             color1: '#0FBD8C',
             color2: '#0DA57A',
