@@ -12,7 +12,7 @@ const SamLabsBLE = {
     ActorCharacteristic: '84fc1520-980c-11e4-8bed-0002a5d5c51b',
     StatusLedCharacteristic: '5baab0a0-980c-11e4-b5e9-0002a5d5c51b',
     SAMBotCommandCharacteristic: 'abcd1234-1234-1234-1234-0002a5d5c51b',
-    sendInterval: 100,
+    sendInterval: 50,
     sendRateMax: 20
 };
 
@@ -473,6 +473,11 @@ class SAMDevice {
         } else {
             await this.sendScratchLink(SamLabsBLE.StatusLedCharacteristic, msg);
         }
+        return new Promise(resolve => {
+            window.setTimeout(() => {
+                resolve();
+            }, SamLabsBLE.sendInterval);
+        });
     }
 
     /**
@@ -489,6 +494,11 @@ class SAMDevice {
         } else {
             await this.sendScratchLink(SamLabsBLE.ActorCharacteristic, msg);
         }
+        return new Promise(resolve => {
+            window.setTimeout(() => {
+                resolve();
+            }, SamLabsBLE.sendInterval);
+        });
     }
 
     /**
@@ -505,6 +515,11 @@ class SAMDevice {
         } else {
             await this.sendScratchLink(SamLabsBLE.SAMBotCommandCharacteristic, msg);
         }
+        return new Promise(resolve => {
+            window.setTimeout(() => {
+                resolve();
+            }, SamLabsBLE.sendInterval);
+        });
     }
 }
 
