@@ -1,6 +1,6 @@
 const BlockType = require('../../extension-support/block-type');
 const ArgumentType = require('../../extension-support/argument-type');
-const Target = require('../../engine/target');
+// const Target = require('../../engine/target');
 const {SamLabsBLE, SAMDevice} = require('./device');
 
 // eslint-disable-next-line no-unused-vars
@@ -92,98 +92,98 @@ class Scratch3SamLabs {
             }
         ];
 
-        this.colors = [
-            '#FF00FF', '#00FFFF', '#FFFF00', '#808000',
-            '#FF0000', '#00FF00', '#0000FF'
-        ];
-        this.deviceAssetAvailable = false;
-        this.runtime.on('PROJECT_LOADED', this.onProjectLoad.bind(this));
+        // this.colors = [
+        //     '#FF00FF', '#00FFFF', '#FFFF00', '#808000',
+        //     '#FF0000', '#00FF00', '#0000FF'
+        // ];
+        // this.deviceAssetAvailable = false;
+        // this.runtime.on('PROJECT_LOADED', this.onProjectLoad.bind(this));
         this.DeviceMapping = new Map();
         // this.createDeviceListAsset();
     }
 
-    static get DeviceListAssetId () {
-        return '_SAMLabs_devicelist';
-    }
+    // static get DeviceListAssetId () {
+    //     return '_SAMLabs_devicelist';
+    // }
 
-    storeDeviceListToAsset () {
-        this.createDeviceListAsset();
-    }
+    // storeDeviceListToAsset () {
+    //     this.createDeviceListAsset();
+    // }
 
-    loadDeviceListFromAsset () {
-        const asset = this.runtime.storage.get('_SAMLabs_devicelist', this.runtime.storage.DataFormat.JSON);
-        if (!asset) {
-            this.deviceAssetAvailable = false;
-            return;
-        }
-        this.deviceAssetAvailable = true;
-        const string = new TextDecoder().decode(asset.data);
-        const devices = JSON.parse(string);
-        this.deviceList = new Map(Object.entries(devices.deviceList));
-        this.DeviceMapping = new Map(Object.entries(devices.mapping));
-    }
+    // loadDeviceListFromAsset () {
+    //     const asset = this.runtime.storage.get('_SAMLabs_devicelist', this.runtime.storage.DataFormat.JSON);
+    //     if (!asset) {
+    //         this.deviceAssetAvailable = false;
+    //         return;
+    //     }
+    //     this.deviceAssetAvailable = true;
+    //     const string = new TextDecoder().decode(asset.data);
+    //     const devices = JSON.parse(string);
+    //     this.deviceList = new Map(Object.entries(devices.deviceList));
+    //     this.DeviceMapping = new Map(Object.entries(devices.mapping));
+    // }
 
-    createDeviceListAsset () {
-        const encoder = new TextEncoder();
-        const encodedData = encoder.encode(JSON.stringify({
-            deviceList: Object.fromEntries(this.deviceList),
-            mapping: Object.fromEntries(this.DeviceMapping)
-        }));
-        console.log('storing data:', encodedData);
-        this.runtime.storage.builtinHelper._store(
-            this.runtime.storage.AssetType.Sprite,
-            this.runtime.storage.DataFormat.JSON,
-            encodedData, '_SAMLabs_devicelist');
-        this.loadDeviceListFromAsset();
-        if (this.deviceAssetAvailable) {
-            return;
-        }
-        const asset = new this.runtime.storage.Asset(
-            this.runtime.storage.AssetType.Sprite,
-            '_SAMLabs_devicelist',
-            this.runtime.storage.DataFormat.JSON,
-            encodedData,
-            false
-        );
-        // Create a new sprite (target)
-        const newTarget = new Target(this.runtime);
+    // createDeviceListAsset () {
+    //     const encoder = new TextEncoder();
+    //     const encodedData = encoder.encode(JSON.stringify({
+    //         deviceList: Object.fromEntries(this.deviceList),
+    //         mapping: Object.fromEntries(this.DeviceMapping)
+    //     }));
+    //     console.log('storing data:', encodedData);
+    //     this.runtime.storage.builtinHelper._store(
+    //         this.runtime.storage.AssetType.Sprite,
+    //         this.runtime.storage.DataFormat.JSON,
+    //         encodedData, '_SAMLabs_devicelist');
+    //     this.loadDeviceListFromAsset();
+    //     if (this.deviceAssetAvailable) {
+    //         return;
+    //     }
+    //     const asset = new this.runtime.storage.Asset(
+    //         this.runtime.storage.AssetType.Sprite,
+    //         '_SAMLabs_devicelist',
+    //         this.runtime.storage.DataFormat.JSON,
+    //         encodedData,
+    //         false
+    //     );
+    //     // Create a new sprite (target)
+    //     const newTarget = new Target(this.runtime);
 
-        // Replace the entire sprite data with JSON
-        newTarget.sprite = {
-            costumes: [
-                {
-                    asset: asset
-                }
-            ],
-            sounds: []
-        };
+    //     // Replace the entire sprite data with JSON
+    //     newTarget.sprite = {
+    //         costumes: [
+    //             {
+    //                 asset: asset
+    //             }
+    //         ],
+    //         sounds: []
+    //     };
 
-        // Add the target to the runtime (makes it a real sprite)
-        this.runtime.targets.push(newTarget);
+    //     // Add the target to the runtime (makes it a real sprite)
+    //     this.runtime.targets.push(newTarget);
         
-        console.log('Added new sprite:', newTarget);
-        this.deviceAssetAvailable = true;
-    }
+    //     console.log('Added new sprite:', newTarget);
+    //     this.deviceAssetAvailable = true;
+    // }
 
-    onProjectLoad () {
-        // this.loadDeviceListFromAsset();
-        // if (!this.deviceAssetAvailable) {
-        //    this.createDeviceListAsset();
-        // }
-    }
+    // onProjectLoad () {
+    //     this.loadDeviceListFromAsset();
+    //     if (!this.deviceAssetAvailable) {
+    //        this.createDeviceListAsset();
+    //     }
+    // }
 
-    hexToRgb (hex) {
-        hex = hex.replace(/^#/, ''); // Remove "#" if present
-        if (hex.length === 3) {
-            // Convert short hex (e.g. #F00) to full hex (#FF0000)
-            hex = hex.split('').map(c => c + c)
-                .join('');
-        }
-        const r = parseInt(hex.substring(0, 2), 16);
-        const g = parseInt(hex.substring(2, 4), 16);
-        const b = parseInt(hex.substring(4, 6), 16);
-        return {r, g, b};
-    }
+    // hexToRgb (hex) {
+    //     hex = hex.replace(/^#/, ''); // Remove "#" if present
+    //     if (hex.length === 3) {
+    //         // Convert short hex (e.g. #F00) to full hex (#FF0000)
+    //         hex = hex.split('').map(c => c + c)
+    //             .join('');
+    //     }
+    //     const r = parseInt(hex.substring(0, 2), 16);
+    //     const g = parseInt(hex.substring(2, 4), 16);
+    //     const b = parseInt(hex.substring(4, 6), 16);
+    //     return {r, g, b};
+    // }
 
 
     getInfo () {
@@ -196,7 +196,6 @@ class Scratch3SamLabs {
             blocks: this.blocks,
             menus: {
                 deviceMenu: 'getDeviceMenu',
-                babyBotDeviceMenu: 'getBabyBotDeviceMenu',
                 babyBotCommand: 'getBabyBotCommandMenu'
             }
         };
@@ -208,7 +207,7 @@ class Scratch3SamLabs {
         this.deviceMap.forEach(device => {
             this.deviceMenu.push({text: device.displayName, value: device.id});
         });
-        this.runtime.requestBlocksUpdate();
+        // this.runtime.requestBlocksUpdate(); - messes up the create variable button
     }
 
     getDeviceMenu () {

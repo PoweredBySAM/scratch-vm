@@ -110,7 +110,6 @@ class Scratch3SamBot {
         this.deviceMap.forEach(device => {
             this.deviceMenu.push({text: device.displayName, value: device.id});
         });
-        this.runtime.requestBlocksUpdate();
     }
 
     getDeviceMenu () {
