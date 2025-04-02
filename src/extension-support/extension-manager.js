@@ -30,7 +30,7 @@ const builtinExtensions = {
 const customExtensions = {
     samlabs: () => require('../../../scratch-samlabs/src/vm/extensions/block/samlabs'),
     sambot: () => require('../../../scratch-samlabs/src/vm/extensions/block/sambot'),
-    microbitMore: () => import('https://microbit-more.github.io/dist/microbitMore.mjs')
+    microbitMore: () => ({url: 'https://microbit-more.github.io/dist/microbitMore.mjs'})
 };
 
 /**
@@ -105,6 +105,8 @@ class ExtensionManager {
         dispatch.setService('extensions', this).catch(e => {
             log.error(`ExtensionManager was unable to register extension service: ${JSON.stringify(e)}`);
         });
+
+        this.loadExtensionURL('samlabs');
     }
 
     /**
@@ -215,7 +217,12 @@ class ExtensionManager {
                 log.warn(message);
                 return Promise.resolve();
             }
-            const extension = customExtensions[extensionURL]().blockClass;
+            let extension;
+            if (customExtensions[extensionURL]().url) {
+                extension = this.fetchExtension(customExtensions[extensionURL]().url);
+            } else {
+                extension = customExtensions[extensionURL]().blockClass;
+            }
             const extensionInstance = new extension(this.runtime);
             const serviceName = this._registerInternalExtension(extensionInstance);
             this._loadedExtensions.set(extensionURL, serviceName);
