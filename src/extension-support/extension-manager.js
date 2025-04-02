@@ -27,6 +27,12 @@ const builtinExtensions = {
     gdxfor: () => require('../extensions/scratch3_gdx_for')
 };
 
+const customExtensions = {
+    samlabs: () => require('../../../scratch-samlabs/src/vm/extensions/block/samlabs'),
+    sambot: () => require('../../../scratch-samlabs/src/vm/extensions/block/sambot'),
+    microbitMore: () => import('https://microbit-more.github.io/dist/microbitMore.mjs')
+};
+
 /**
  * @typedef {object} ArgumentInfo - Information about an extension block argument
  * @property {ArgumentType} type - the type of value this argument can take
@@ -203,6 +209,18 @@ class ExtensionManager {
      * @returns {Promise} resolved once the extension is loaded and initialized or rejected on failure
      */
     loadExtensionURL (extensionURL) {
+        if (Object.prototype.hasOwnProperty.call(customExtensions, extensionURL)) {
+            if (this.isExtensionLoaded(extensionURL)) {
+                const message = `Rejecting attempt to load a second extension with ID ${extensionURL}`;
+                log.warn(message);
+                return Promise.resolve();
+            }
+            const extension = customExtensions[extensionURL]().blockClass;
+            const extensionInstance = new extension(this.runtime);
+            const serviceName = this._registerInternalExtension(extensionInstance);
+            this._loadedExtensions.set(extensionURL, serviceName);
+            return Promise.resolve();
+        }
         if (Object.prototype.hasOwnProperty.call(builtinExtensions, extensionURL)) {
             /** @TODO dupe handling for non-builtin extensions. See commit 670e51d33580e8a2e852b3b038bb3afc282f81b9 */
             if (this.isExtensionLoaded(extensionURL)) {
