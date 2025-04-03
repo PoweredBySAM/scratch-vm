@@ -30,7 +30,17 @@ const builtinExtensions = {
 const customExtensions = {
     samlabs: () => require('../../../scratch-samlabs/src/vm/extensions/block/samlabs'),
     sambot: () => require('../../../scratch-samlabs/src/vm/extensions/block/sambot'),
-    microbitMore: () => ({url: 'https://microbit-more.github.io/dist/microbitMore.mjs'})
+    microbitMore: () => ({url: 'https://microbit-more.github.io/dist/microbitMore.mjs'}),
+    controlplus: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/controlplus.mjs'}),
+    duplotrain: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/duplotrain.mjs'}),
+    legoble: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/legoble.mjs'}),
+    legoluigi: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/legoluigi.mjs'}),
+    legomario: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/legomario.mjs'}),
+    legopeach: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/legopeach.mjs'}),
+    legoremote: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/legoremote.mjs'}),
+    poweredup: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/poweredup.mjs'}),
+    spikeessential: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/spikeessential.mjs'})
+    // spikeprime: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/spikeprime.mjs'})
 };
 
 /**
@@ -210,7 +220,7 @@ class ExtensionManager {
      * @param {string} extensionURL - the URL for the extension to load OR the ID of an internal extension
      * @returns {Promise} resolved once the extension is loaded and initialized or rejected on failure
      */
-    loadExtensionURL (extensionURL) {
+    async loadExtensionURL (extensionURL) {
         if (Object.prototype.hasOwnProperty.call(customExtensions, extensionURL)) {
             if (this.isExtensionLoaded(extensionURL)) {
                 const message = `Rejecting attempt to load a second extension with ID ${extensionURL}`;
@@ -219,11 +229,11 @@ class ExtensionManager {
             }
             let extension;
             if (customExtensions[extensionURL]().url) {
-                extension = this.fetchExtension(customExtensions[extensionURL]().url);
+                extension = await this.fetchExtension(customExtensions[extensionURL]().url);
             } else {
-                extension = customExtensions[extensionURL]().blockClass;
+                extension = customExtensions[extensionURL]();
             }
-            const extensionInstance = new extension(this.runtime);
+            const extensionInstance = new extension.blockClass(this.runtime);
             const serviceName = this._registerInternalExtension(extensionInstance);
             this._loadedExtensions.set(extensionURL, serviceName);
             return Promise.resolve();
