@@ -3,6 +3,97 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.260](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.259...v5.0.260) (2025-04-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-blocks to v1.1.208 ([254067d](https://github.com/scratchfoundation/scratch-vm/commit/254067d95ec8c9acad40edf7b8f57a6a09c7ee3a))
+
+## [5.0.259](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.258...v5.0.259) (2025-04-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.98 ([63d01be](https://github.com/scratchfoundation/scratch-vm/commit/63d01be06daec38be4d88577bc7a9a2d417a31bd))
+
+## [5.0.258](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.257...v5.0.258) (2025-04-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.182 ([cfc474c](https://github.com/scratchfoundation/scratch-vm/commit/cfc474c651f483f0e235e6eddaaeb5f382481121))
+
+## [5.0.257](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.256...v5.0.257) (2025-04-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.197 ([6166025](https://github.com/scratchfoundation/scratch-vm/commit/6166025f97f757c8be4cacf17670ebf44f63f9c9))
+
+## [5.0.256](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.255...v5.0.256) (2025-04-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.195 ([42f5d95](https://github.com/scratchfoundation/scratch-vm/commit/42f5d95052218aa790382174256b83939fb67acd))
+
+## [5.0.255](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.254...v5.0.255) (2025-04-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.96 ([2c3cd1e](https://github.com/scratchfoundation/scratch-vm/commit/2c3cd1e54b1c2860d6fbb660208aaf3630af8002))
+
+## [5.0.254](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.253...v5.0.254) (2025-04-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.181 ([037be81](https://github.com/scratchfoundation/scratch-vm/commit/037be81f7ec7054285608fbc14f4367bc7a372b1))
+
+## [5.0.253](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.252...v5.0.253) (2025-04-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.193 ([13f2e4b](https://github.com/scratchfoundation/scratch-vm/commit/13f2e4bd2bbf039e03a5ab0b68f008b574a8bf0f))
+
+## [5.0.252](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.251...v5.0.252) (2025-04-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.191 ([f8934b7](https://github.com/scratchfoundation/scratch-vm/commit/f8934b7ed84f22d8d1a2902c2404b8bd560b196b))
+
+## [5.0.251](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.250...v5.0.251) (2025-04-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.189 ([6aaee75](https://github.com/scratchfoundation/scratch-vm/commit/6aaee75e54cddc68257ad603f217ce686f5bd738))
+
+## [5.0.250](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.249...v5.0.250) (2025-04-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.94 ([6b8cbdc](https://github.com/scratchfoundation/scratch-vm/commit/6b8cbdc8d6ce35ce3f120f4bb71ebedaf0ae0773))
+
+## [5.0.249](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.248...v5.0.249) (2025-03-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.180 ([e53be8a](https://github.com/scratchfoundation/scratch-vm/commit/e53be8a67bd8e793e32e17c48533f2e7084473e6))
+
+## [5.0.248](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.247...v5.0.248) (2025-03-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.93 ([19f35a7](https://github.com/scratchfoundation/scratch-vm/commit/19f35a7b34d51051162f2a6df196f372afd85b1d))
+
 ## [5.0.247](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.246...v5.0.247) (2025-03-28)
 
 
