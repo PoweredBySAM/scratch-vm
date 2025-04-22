@@ -223,7 +223,7 @@ class Root {
      * @returns {Promise} a promise result of the write operation
      */
     sendPacket (deviceID, commandID, payload = Array(16).fill(0)) {
-        const packetID = this.packetID; // Ignore packet ID for now
+        const packetID = this.packetID;
         this.packetID++;
         if (this.packetID >= 256) {
             this.packetID = 0;
