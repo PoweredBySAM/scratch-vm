@@ -4,6 +4,7 @@
  * root robot extension for scratch
  * created by raphaelcherney (github.com/raphaelcherney)
  * modified by Rble12b: refactor, fix eslint errors
+ * - fix communication issues with the robot (add crc function)
  */
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
@@ -101,6 +102,24 @@ function colorDataToArray (dataIn) {
     return arrayOut;
 }
 
+function crc8 (data) {
+    let crc = 0x00; // Initialize CRC value
+    const polynomial = 0x07; // Define the CRC-8 polynomial
+  
+    for (let i = 0; i < data.length; i++) {
+        crc ^= data[i]; // XOR with current byte
+    
+        for (let j = 0; j < 8; j++) {
+            if (crc & 0x80) { // Check if MSB is set
+                crc = (crc << 1) ^ polynomial; // Shift left and XOR with polynomial
+            } else {
+                crc <<= 1; // Shift left
+            }
+        }
+    }
+    return crc & 0xFF; // Mask to 8 bits
+}
+
 /**
  * Manage communication with a Root peripheral over a Bluetooth Low Energy client socket.
  */
@@ -154,6 +173,7 @@ class Root {
         };
         this._colorData = new Array(32).fill(0);
         this._colorSums = new Array(16).fill(0);
+        this.packetID = 0;
     }
 
     /**
@@ -203,9 +223,13 @@ class Root {
      * @returns {Promise} a promise result of the write operation
      */
     sendPacket (deviceID, commandID, payload = Array(16).fill(0)) {
-        const packetID = 0; // Ignore packet ID for now
+        const packetID = this.packetID;
+        this.packetID++;
+        if (this.packetID >= 256) {
+            this.packetID = 0;
+        }
         let packet = [deviceID, commandID, packetID];
-        const checksum = 0; // Ignore checksum for now
+        const checksum = crc8(packet.concat(payload));
 
         packet = packet.concat(payload).concat([checksum]);
 
