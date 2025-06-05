@@ -31,6 +31,7 @@ const builtinExtensions = {
 const customExtensions = {
     samlabs: () => require('../../../scratch-samlabs/src/vm/extensions/block/samlabs'),
     sambot: () => require('../../../scratch-samlabs/src/vm/extensions/block/sambot'),
+    huskylens: () => require('../../../scratch-huskylens/src/vm/extensions/block/huskylens'),
     microbitMore: () => ({url: 'https://microbit-more.github.io/dist/microbitMore.mjs'}),
     controlplus: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/controlplus.mjs'}),
     duplotrain: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/duplotrain.mjs'}),
@@ -222,12 +223,17 @@ class ExtensionManager {
      * @returns {Promise} resolved once the extension is loaded and initialized or rejected on failure
      */
     async loadExtensionURL (extensionURL) {
+        if (this.isExtensionLoaded(extensionURL)) {
+            const message = `Rejecting attempt to load a second extension with ID ${extensionURL}`;
+            log.warn(message);
+            return Promise.resolve();
+        }
+
+        if (extensionURL === 'huskylens') {
+            await this.loadExtensionURL('microbitMore');
+        }
+
         if (Object.prototype.hasOwnProperty.call(customExtensions, extensionURL)) {
-            if (this.isExtensionLoaded(extensionURL)) {
-                const message = `Rejecting attempt to load a second extension with ID ${extensionURL}`;
-                log.warn(message);
-                return Promise.resolve();
-            }
             let extension;
             if (customExtensions[extensionURL]().url) {
                 extension = await this.fetchExtension(customExtensions[extensionURL]().url);
@@ -240,13 +246,6 @@ class ExtensionManager {
             return Promise.resolve();
         }
         if (Object.prototype.hasOwnProperty.call(builtinExtensions, extensionURL)) {
-            /** @TODO dupe handling for non-builtin extensions. See commit 670e51d33580e8a2e852b3b038bb3afc282f81b9 */
-            if (this.isExtensionLoaded(extensionURL)) {
-                const message = `Rejecting attempt to load a second extension with ID ${extensionURL}`;
-                log.warn(message);
-                return Promise.resolve();
-            }
-
             const extension = builtinExtensions[extensionURL]();
             const extensionInstance = new extension(this.runtime);
             const serviceName = this._registerInternalExtension(extensionInstance);
