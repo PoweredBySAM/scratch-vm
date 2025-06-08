@@ -3,6 +3,286 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.300](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.299...v5.0.300) (2025-05-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.114 ([9c601b7](https://github.com/scratchfoundation/scratch-vm/commit/9c601b7957b2a7c1a9b06d247ca096aa60fd264e))
+
+## [5.0.299](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.298...v5.0.299) (2025-05-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.190 ([01193e3](https://github.com/scratchfoundation/scratch-vm/commit/01193e31ec787d95646930f3360bdf00c2aaae73))
+
+## [5.0.298](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.297...v5.0.298) (2025-05-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.230 ([4c482a8](https://github.com/scratchfoundation/scratch-vm/commit/4c482a89b2fc35ed05a5edda143da4199ac7b39b))
+
+## [5.0.297](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.296...v5.0.297) (2025-05-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.229 ([ec3b9c8](https://github.com/scratchfoundation/scratch-vm/commit/ec3b9c8de248daf24121e0f82603a48e376f7420))
+
+## [5.0.296](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.295...v5.0.296) (2025-05-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.228 ([4fa63d0](https://github.com/scratchfoundation/scratch-vm/commit/4fa63d0ed244c5a88824ab797057f7f7a56925ec))
+
+## [5.0.295](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.294...v5.0.295) (2025-05-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.112 ([12b4a90](https://github.com/scratchfoundation/scratch-vm/commit/12b4a902a540de20ce5abf7ba9e4d9fb5e9e28ab))
+
+## [5.0.294](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.293...v5.0.294) (2025-05-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.189 ([c3adf66](https://github.com/scratchfoundation/scratch-vm/commit/c3adf666518181c7062846cbb89e1378ad96e6bb))
+
+## [5.0.293](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.292...v5.0.293) (2025-05-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.226 ([ef1a391](https://github.com/scratchfoundation/scratch-vm/commit/ef1a391eb739d6c8e8a213d57cfd057c62ccb228))
+
+## [5.0.292](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.291...v5.0.292) (2025-04-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.224 ([90b8003](https://github.com/scratchfoundation/scratch-vm/commit/90b8003fc1537b63d4a780f7808ed0d783b4f77f))
+
+## [5.0.291](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.290...v5.0.291) (2025-04-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.222 ([f1bcbc5](https://github.com/scratchfoundation/scratch-vm/commit/f1bcbc5d60ed7edbc6240a59a4f9d8480ed8d7e1))
+
+## [5.0.290](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.289...v5.0.290) (2025-04-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.110 ([9997412](https://github.com/scratchfoundation/scratch-vm/commit/99974122462bb059ba6d6e6b094ce3ec1da677d0))
+
+## [5.0.289](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.288...v5.0.289) (2025-04-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.188 ([2bc8f36](https://github.com/scratchfoundation/scratch-vm/commit/2bc8f365644a220ee053c3f5c17be515062a5763))
+
+## [5.0.288](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.287...v5.0.288) (2025-04-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.220 ([05f0f78](https://github.com/scratchfoundation/scratch-vm/commit/05f0f788d2a01ee72ef1de1aa14492d1efe60a0e))
+
+## [5.0.287](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.286...v5.0.287) (2025-04-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.218 ([51b30fe](https://github.com/scratchfoundation/scratch-vm/commit/51b30fe6474c25b4a5859ccf68d23b652a0624ef))
+
+## [5.0.286](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.285...v5.0.286) (2025-04-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-blocks to v1.1.210 ([33e8f64](https://github.com/scratchfoundation/scratch-vm/commit/33e8f64ae4bf79631c804da7451c2ebe24b6a4f9))
+
+## [5.0.285](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.284...v5.0.285) (2025-04-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.108 ([1854bd3](https://github.com/scratchfoundation/scratch-vm/commit/1854bd39078174b33160fdf9e5655381403b1ec8))
+
+## [5.0.284](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.283...v5.0.284) (2025-04-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.187 ([7e71573](https://github.com/scratchfoundation/scratch-vm/commit/7e7157393f43db2a9fed068d4affc47bd3b1c98a))
+
+## [5.0.283](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.282...v5.0.283) (2025-04-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.216 ([309fdd9](https://github.com/scratchfoundation/scratch-vm/commit/309fdd90ef1ed438f6ad5057201111355cdf8116))
+
+## [5.0.282](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.281...v5.0.282) (2025-04-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.215 ([de29e92](https://github.com/scratchfoundation/scratch-vm/commit/de29e9286cad4147eb1e23bb6d1e83b10c41b365))
+
+## [5.0.281](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.280...v5.0.281) (2025-04-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.106 ([dc6319c](https://github.com/scratchfoundation/scratch-vm/commit/dc6319cdb2d62097d2945de3b1840aa0958090d7))
+
+## [5.0.280](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.279...v5.0.280) (2025-04-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.186 ([7e13a3b](https://github.com/scratchfoundation/scratch-vm/commit/7e13a3bcfc33287309d4e8ea4de2c082bf21f1ce))
+
+## [5.0.279](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.278...v5.0.279) (2025-04-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.214 ([2a54c2a](https://github.com/scratchfoundation/scratch-vm/commit/2a54c2a6e7e923fdaaf74340c95b40f0e2e15a86))
+
+## [5.0.278](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.277...v5.0.278) (2025-04-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.105 ([bb79006](https://github.com/scratchfoundation/scratch-vm/commit/bb7900642f5792b1da8be4fab0e9391647a2d5ac))
+
+## [5.0.277](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.276...v5.0.277) (2025-04-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.185 ([98bfaad](https://github.com/scratchfoundation/scratch-vm/commit/98bfaada5f007a8b5a11b387bc5e9de694ecf206))
+
+## [5.0.276](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.275...v5.0.276) (2025-04-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.213 ([9951e51](https://github.com/scratchfoundation/scratch-vm/commit/9951e51c534b97a908c84484e36b4c9ab0be0fe6))
+
+## [5.0.275](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.274...v5.0.275) (2025-04-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.211 ([24d0272](https://github.com/scratchfoundation/scratch-vm/commit/24d0272e0e5b81d169d2999d9efcbc12bbfeb28f))
+
+## [5.0.274](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.273...v5.0.274) (2025-04-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.209 ([9d22bc8](https://github.com/scratchfoundation/scratch-vm/commit/9d22bc8eb8602b488f674d239103b8c17c22b735))
+
+## [5.0.273](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.272...v5.0.273) (2025-04-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.103 ([f16f014](https://github.com/scratchfoundation/scratch-vm/commit/f16f014572b2dae5df8636c40602bd5571a62b94))
+
+## [5.0.272](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.271...v5.0.272) (2025-04-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.207 ([e210cb0](https://github.com/scratchfoundation/scratch-vm/commit/e210cb0015c5a65f1f76c14ab36749117d850912))
+
+## [5.0.271](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.270...v5.0.271) (2025-04-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.184 ([98916f0](https://github.com/scratchfoundation/scratch-vm/commit/98916f09f93d517d67d828a0fa80c0ab9c0e2dea))
+
+## [5.0.270](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.269...v5.0.270) (2025-04-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.206 ([d99a570](https://github.com/scratchfoundation/scratch-vm/commit/d99a5709d7b9162f93ea1352bc85534dbdd3a150))
+
+## [5.0.269](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.268...v5.0.269) (2025-04-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.205 ([b2c575f](https://github.com/scratchfoundation/scratch-vm/commit/b2c575fc1b897e37a0753eefee9c6d76ddbc4b31))
+
+## [5.0.268](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.267...v5.0.268) (2025-04-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.101 ([407ea34](https://github.com/scratchfoundation/scratch-vm/commit/407ea34783f44e9bc85a56cafa9ba387b727c378))
+
+## [5.0.267](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.266...v5.0.267) (2025-04-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.183 ([e66650f](https://github.com/scratchfoundation/scratch-vm/commit/e66650f50744f37f5a63eeb5e6a0d89dd045ecaa))
+
+## [5.0.266](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.265...v5.0.266) (2025-04-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.202 ([2b3e506](https://github.com/scratchfoundation/scratch-vm/commit/2b3e506dd1907ffb73c4e51819eb772e7e847ed7))
+
+## [5.0.265](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.264...v5.0.265) (2025-04-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.201 ([74370de](https://github.com/scratchfoundation/scratch-vm/commit/74370de930834ef532fe16aced30011bb5d575ed))
+
+## [5.0.264](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.263...v5.0.264) (2025-04-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.200 ([44979c8](https://github.com/scratchfoundation/scratch-vm/commit/44979c8526914568634459430810b7c16e440d56))
+
+## [5.0.263](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.262...v5.0.263) (2025-04-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-svg-renderer to v3.0.99 ([ace4fa9](https://github.com/scratchfoundation/scratch-vm/commit/ace4fa9699046cdf3967d0acda04419256741603))
+
+## [5.0.262](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.261...v5.0.262) (2025-04-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.198 ([dbbda12](https://github.com/scratchfoundation/scratch-vm/commit/dbbda12a8df4ac4072a04b05adfd8512e61293dc))
+
+## [5.0.261](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.260...v5.0.261) (2025-04-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-blocks to v1.1.209 ([5adb767](https://github.com/scratchfoundation/scratch-vm/commit/5adb767e81a0d1fb3f0aa0f920ba1a4a29493e77))
+
 ## [5.0.260](https://github.com/scratchfoundation/scratch-vm/compare/v5.0.259...v5.0.260) (2025-04-09)
 
 
