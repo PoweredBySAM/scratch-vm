@@ -2,9 +2,8 @@
 /* eslint-disable require-jsdoc */
 /**
  * root robot extension for scratch
- * created by raphaelcherney (github.com/raphaelcherney)
- * modified by Rble12b: refactor, fix eslint errors
- * - fix communication issues with the robot (add crc function)
+ * created by Raphael Cherney (github.com/raphaelcherney)
+ * original file: https://github.com/raphaelcherney/scratch-vm/blob/root/src/extensions/scratch3_root/index.js
  */
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
