@@ -30,7 +30,7 @@ const builtinExtensions = {
 
 const customExtensions = {
     samlabs: () => require('../../../scratch-samlabs/src/vm/extensions/block/samlabs'),
-    sambot: () => require('../../../scratch-samlabs/src/vm/extensions/block/sambot'),
+    sambot: () => require('../../../scratch-sambot/src/vm/extensions/block/sambot'),
     huskylens: () => require('../../../scratch-huskylens/dist/huskylens.mjs'),
     microbitMore: () => ({url: 'https://microbit-more.github.io/dist/microbitMore.mjs'}),
     controlplus: () => ({url: 'https://bricklife.com/scratch-gui/xcratch/controlplus.mjs'}),
