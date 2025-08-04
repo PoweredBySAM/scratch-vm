@@ -8,13 +8,13 @@
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
 const Cast = require('../../util/cast');
-const formatMessage = require('format-message');
 const BLE = require('./ble-llk.js');
 const Base64Util = require('../../util/base64-util');
 const MathUtil = require('../../util/math-util');
 const RateLimiter = require('../../util/rateLimiter.js');
 const log = require('../../util/log');
 const EventEmitter = require('events');
+const translations = require('./translations.json');
 
 /**
  * Icon svg to be displayed at the left edge of each extension block, encoded as a data URI.
@@ -104,10 +104,10 @@ function colorDataToArray (dataIn) {
 function crc8 (data) {
     let crc = 0x00; // Initialize CRC value
     const polynomial = 0x07; // Define the CRC-8 polynomial
-  
+
     for (let i = 0; i < data.length; i++) {
         crc ^= data[i]; // XOR with current byte
-    
+
         for (let j = 0; j < 8; j++) {
             if (crc & 0x80) { // Check if MSB is set
                 crc = (crc << 1) ^ polynomial; // Shift left and XOR with polynomial
@@ -120,11 +120,46 @@ function crc8 (data) {
 }
 
 /**
+ * Formatter which is used for translation.
+ * This will be replaced which is used in the runtime.
+ * @param {object} messageData - format-message object
+ * @returns {string} - message for the locale
+ */
+let formatMessage = messageData => messageData.default;
+
+/**
+ * Setup format-message for this extension.
+ */
+const setupTranslations = () => {
+    const localeSetup = formatMessage.setup();
+    if (localeSetup && localeSetup.translations[localeSetup.locale]) {
+        Object.assign(
+            localeSetup.translations[localeSetup.locale],
+            translations[localeSetup.locale]
+        );
+    }
+};
+
+/**
  * Manage communication with a Root peripheral over a Bluetooth Low Energy client socket.
  */
 class Root {
 
+    /**
+     * A translation object which is used in this class.
+     * @param {FormatObject} formatter - translation object
+     */
+    static set formatMessage (formatter) {
+        formatMessage = formatter;
+        if (formatMessage) setupTranslations();
+    }
+
     constructor (runtime, extensionId) {
+
+        if (runtime.formatMessage) {
+            // Replace 'formatMessage' to a formatter which is used in the runtime.
+            formatMessage = runtime.formatMessage;
+        }
 
         /**
          * The Scratch 3.0 runtime used to trigger the green flag button.
@@ -387,6 +422,7 @@ class Scratch3RootBlocks {
      * @returns {object} metadata for this extension and its blocks.
      */
     getInfo () {
+        setupTranslations();
         return {
             id: Scratch3RootBlocks.EXTENSION_ID,
             name: 'Root',
@@ -753,25 +789,25 @@ class Scratch3RootBlocks {
                 return true;
             }
             return false;
-            
+
         case 'red':
             if (this._peripheral._colorSums[2] > minSum) {
                 return true;
             }
             return false;
-            
+
         case 'green':
             if (this._peripheral._colorSums[3] > minSum) {
                 return true;
             }
             return false;
-            
+
         case 'blue':
             if (this._peripheral._colorSums[4] > minSum) {
                 return true;
             }
             return false;
-            
+
         default:
             log.warn(`Unknown comparison operator in whenColor: ${args.COLOR}`);
             return false;

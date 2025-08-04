@@ -1,0 +1,32 @@
+{
+    "en": {
+        "root.driveDistance": "move [DISTANCE] cm",
+        "root.rotateDistance": "turn [ANGLE] deg",
+        "root.setSpeeds": "set wheel speeds: left [LEFT] right [RIGHT] cm/s",
+        "root.setMarker": "set [MARKER]",
+        "root.setLightsRGB": "set lights: red [RED] green [GREEN] blue [BLUE] %",
+        "root.playNote": "play tone [FREQUENCY] Hz for [DURATION] s",
+        "root.sayText": "say [TEXT]",
+        "root.whenBumper": "when [BUMPER] bumper pressed",
+        "root.isBumper": "[BUMPER] bumper pressed?",
+        "root.whenTouch": "when [TOUCH] top touched",
+        "root.isTouch": "[TOUCH] top touched?",
+        "root.whenColor": "when [COLOR] color scanned",
+        "root.isColor": "[COLOR] color scanned on sensor [SENSOR]?"
+    },
+    "hu": {
+        "root.driveDistance": "haladjon [DISTANCE] cm-t",
+        "root.rotateDistance": "forduljon [ANGLE] fokot",
+        "root.setSpeeds": "állítsa be a kerekek sebességét: bal [LEFT] jobb [RIGHT] cm/s",
+        "root.setMarker": "állítsa be a [MARKER] jelzőt",
+        "root.setLightsRGB": "állítsa be a fényeket: piros [RED] zöld [GREEN] kék [BLUE] %",
+        "root.playNote": "játszon le hangot [FREQUENCY] Hz-en [DURATION] s-ig",
+        "root.sayText": "mondja ki: [TEXT]",
+        "root.whenBumper": "amikor a [BUMPER] ütköző megnyomódik",
+        "root.isBumper": "[BUMPER] ütköző megnyomva?",
+        "root.whenTouch": "amikor a [TOUCH] teteje megérintve van",
+        "root.isTouch": "[TOUCH] teteje megérintve?",
+        "root.whenColor": "amikor a [COLOR] szín érzékelve van",
+        "root.isColor": "[COLOR] szín érzékelve a(z) [SENSOR] érzékelőn?"
+    }
+}
